@@ -185,7 +185,43 @@ mysqldump -u USER -p -C products > /mnt/backups/products.sql.tgz
 
 
 
+How to login Remote mysql server 
+--------------------------------
 
+Server
+------
+vim /etc/mysql/mysql.conf.d/mysqld.cnf
+
+bind-address    = 0.0.0.0
+
+sudo /etc/init.d/mysql restart
+
+sudo /etc/init.d/mysql status
+
+Client
+------
+
+telnet serverip 3306
+
+It should happen
+
+Server
+------
+
+sudo mysql -u root -p
+
+GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY 'Pa55w0rd' WITH GRANT OPTION;
+
+flush privileges
+
+exit
+
+Client
+------
+
+mysql -u root -h serverip -p
+
+-----------------------------------------------------------------------------------------------------------------------------
 
 
 
