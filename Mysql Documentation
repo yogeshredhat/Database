@@ -223,6 +223,52 @@ mysql -u root -h serverip -p
 
 -----------------------------------------------------------------------------------------------------------------------------
 
+Install phpMyAdmin on Ubuntu 16.04
+----------------------------------
+
+sudo apt-get install phpmyadmin
+
+select apache2
+
+Database - yes
+
+Enter a password for phpmyadmin - newpasswd
+
+Re-enter passwd     
+
+Enter root passwd for changes - Sys1adm
+
+mysql -u root -p
+
+GRANT ALL ON phpmyadmindb.* TO root IDENTIFIED BY 'mysqlrootpasswd';
+
+flush privileges;
+
+quit
+
+
+Check below files your entry is there
+-------------------------------------
+
+sudo vim /etc/phpmyadmin/config-db.php
+
+$dbuser='phpmyadminuser';
+$dbpass='Sys1adm';
+$basepath='';
+$dbname='phpmyadmindb';
+$dbserver='localhost';
+$dbport='';
+$dbtype='mysql';
+
+sudo apt-get install php-mbstring php7.0-mbstring php-gettext
+
+sudo vim /etc/apache2/apache2.conf
+
+Add the following line at the end:
+
+Include /etc/phpmyadmin/apache.conf
+
+sudo systemctl restart apache2
 
 
 
