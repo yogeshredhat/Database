@@ -1,0 +1,198 @@
+How to Install MySQL 5.7 on Ubuntu 16.04 LTS
+--------------------------------------------
+
+Step 1 – Configure Apt Repository
+---------------------------------
+
+sudo wget http://repo.mysql.com/mysql-apt-config_0.8.9-1_all.deb
+
+sudo dpkg -i mysql-apt-config_0.8.9-1_all.deb
+
+ok
+
+
+Step 2 – Install MySQL Server
+-----------------------------
+
+sudo apt-get update
+
+sudo apt-get install mysql-server
+
+----- We need to set root passwd ------------ Sys1adm
+
+Check My SQL Version
+--------------------
+
+mysql --version
+
+mysql  Ver 14.14 Distrib 5.7.24, for Linux (x86_64) using  EditLine wrapper
+
+
+mysql_secure_installation
+
+Enter root password : Sys1adm
+
+VALIDATE PASSWORD PLUGIN can be used to test passwords
+and improve security. It checks the strength of password
+and allows the users to set only those passwords which are
+secure enough. Would you like to setup VALIDATE PASSWORD plugin?
+
+Press y|Y for Yes, any other key for No: No
+
+
+Using existing password for root.
+Change the password for root ? ((Press y|Y for Yes, any other key for No) : No
+
+
+Remove anonymous users? (Press y|Y for Yes, any other key for No) : Yes
+Success.
+
+
+Disallow root login remotely? (Press y|Y for Yes, any other key for No) : Yes
+Success.
+
+
+Remove test database and access to it? (Press y|Y for Yes, any other key for No) : Yes
+ - Dropping test database...
+
+
+Reload privilege tables now? (Press y|Y for Yes, any other key for No) : Yes
+Success.
+--------------------------------------------------------------------------------------------------------------------------------------
+
+Reset Forgetten MySQL Root Password
+-----------------------------------
+
+sudo /etc/init.d/mysql stop
+
+------ If not stopped ps -aux | grep mysql,  kill -p mysql_processid
+
+sudo mkdir /var/run/mysqld/
+
+sudo chown mysql /var/run/mysqld/
+
+---------Run the commands below to start MySQL in safe mode by bypassing the standard authentication process..
+
+sudo mysqld_safe --skip-grant-tables &
+
+take 10 seconds and then press enter key
+
+----------run the commands below to logon to the database server with the root account without typing a password........
+
+sudo mysql -u root
+
+-----------run the SQL command statement below to use the default mysql database................
+
+use mysql;
+
+----------------Finally, run the SQL statement below to change the root password----------
+
+update user set authentication_string=PASSWORD("New_Passwore_Here") where User='root';
+
+flush privileges;
+exit;
+
+--------------Finally, stop MySQL safe_mode and start MySQL default service------------
+
+sudo /etc/init.d/mysql stop
+sudo /etc/init.d/mysql start
+
+
+sudo mysql -u root -p
+
+Enter your new password it will work
+
+--------------------------------------------------------------------------------------------------------------------------------------
+
+MYSQL Basic Query
+-----------------
+
+SHOW DATABASES;
+
+CREATE DATABASE events; For Delete DROP DATABASE events;
+
+USE events;
+
+SHOW tables; 
+
+How to Create a MySQL Table witin events database
+-------------------------------------------------
+
+CREATE TABLE potluck (id INT NOT NULL PRIMARY KEY AUTO_INCREMENT, name VARCHAR(20), food VARCHAR(30), confirmed CHAR(1), signup_date DATE);
+
+SHOW TABLES;
+
+DESCRIBE potluck;
+
+Add Information to a MySQL Table
+----------------------------------
+
+INSERT INTO `potluck` (`id`,`name`,`food`,`confirmed`,`signup_date`) VALUES (NULL, "John", "Casserole","Y", '2012-04-11');
+
+SELECT * FROM potluck;
+
+Update Information in the Table
+-------------------------------
+
+UPDATE `potluck` SET  `confirmed` = 'Y' WHERE `potluck`.`name` ='Sandy';
+
+How to Add and Delete a Column
+------------------------------
+
+ALTER TABLE potluck ADD email VARCHAR(40);
+
+Add coloum after particular field
+---------------------------------
+
+ALTER TABLE potluck ADD email VARCHAR(40) AFTER name; 
+
+Delete particular column
+------------------------
+
+ALTER TABLE potluck DROP email;
+
+
+How to Delete a Row
+-------------------
+
+DELETE from potluck  where name='Sandy';
+
+How To Backup MySQL Databases on an Ubuntu 
+------------------------------------------
+
+mysqldump -u username -p database_to_backup > backup_name.sql
+
+Restoring
+---------
+
+mysql -u username -p
+
+CREATE DATABASE database_name;
+exit
+
+mysql -u username -p database_name < backup_name.sql
+
+Backing up all your databases
+-----------------------------
+
+mysqldump -u USER -p --all-databases > /mnt/backups/all_databases.sql
+
+
+Let's stick with our same example as above, only with compression. 
+------------------------------------------------------------------
+
+mysqldump -u USER -p -C products > /mnt/backups/products.sql.tgz
+
+
+
+
+
+
+
+
+
+
+
+
+
+
