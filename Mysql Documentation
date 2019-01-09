@@ -270,6 +270,60 @@ Include /etc/phpmyadmin/apache.conf
 
 sudo systemctl restart apache2
 
+How To Move a MySQL Data Directory to a New Location on Ubuntu 16.04
+--------------------------------------------------------------------
+
+mysql -u root -p
+
+passwd
+
+mysql> select @@datadir;
+
+Output
++-----------------+
+| @@datadir       |
++-----------------+
+| /var/lib/mysql/ |
++-----------------+
+1 row in set (0.00 sec)
+
+sudo systemctl stop mysql
+
+sudo systemctl status mysql
+
+mkdir /newpath
+
+chown mysql:mysql /newpath
+
+sudo rsync -av /var/lib/mysql /newpath
+
+sudo mv /var/lib/mysql /var/lib/mysql.bak
+
+sudo vim /etc/mysql/mysql.conf.d/mysqld.cnf
+
+datadir=/newpath/mysql
+
+Configuring AppArmor Access Control Rules
+We’ll need to tell AppArmor to let MySQL write to the new directory by creating an alias 
+between the default directory and the new location
+
+sudo vim /etc/apparmor.d/tunables/alias
+
+alias /var/lib/mysql/ -> /newpath/mysql
+
+sudo systemctl restart apparmor
+
+sudo systemctl start mysql
+
+sudo systemctl status mysql
+
+mysql -u root -p
+
+select @@datadir;
+
+sudo rm -Rf /var/lib/mysql.bak
+
+-----------------------------------------------------------------------------------------------------------------------------
 
 
 
