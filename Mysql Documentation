@@ -325,6 +325,38 @@ sudo rm -Rf /var/lib/mysql.bak
 
 -----------------------------------------------------------------------------------------------------------------------------
 
+Access Privileges to access particular database
+-----------------------------------------------
+
+mysql -u root -p
+passwd
+
+create user yogesh identified by 'asdfr';
+
+create database inventory;
+
+grant all privileges on inventory.* to 'yogesh'@'%';
+
+flush privileges;
+
+exit
+
+mysql -u yogesh -p
+
+asdfr
+
+show databases;
+--------------------------------------------------------------------------------------------------------------------
+Reset Mysql normal user passwd
+------------------------------
+mysql -u root -p
+passwd
+
+use mysql;
+
+update user set password=PASSWORD('newpasswd') where User='yogesh';
+
+flush privileges;
 
 
 
